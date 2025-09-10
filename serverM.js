@@ -1,21 +1,17 @@
-// serverM.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
 const nodemailer = require('nodemailer');
 const path = require('path');
-const bcrypt = require('bcryptjs'); // bcryptjs avoids native build issues in many environments
+const bcrypt = require('bcrypt');
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = 3002;
 
-// CORS: allow only your frontend in production; default '*' for dev
-const FRONTEND_URL = process.env.FRONTEND_URL || '*';
-app.use(cors({ origin: FRONTEND_URL }));
+app.use(cors());
 app.use(bodyParser.json());
 
-// DB file
 const DB_FILE = path.join(__dirname, 'db.json');
 
 // ---------- Helpers ----------
@@ -23,7 +19,7 @@ function readDB() {
   if (!fs.existsSync(DB_FILE)) {
     fs.writeFileSync(DB_FILE, JSON.stringify({ users: [] }, null, 2));
   }
-  return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+  return JSON.parse(fs.readFileSync(DB_FILE));
 }
 
 function writeDB(data) {
@@ -31,7 +27,7 @@ function writeDB(data) {
 }
 
 function nextUserId(users) {
-  const ids = users.map(u => (typeof u.id === 'number' ? u.id : 0));
+  const ids = users.map(u => typeof u.id === 'number' ? u.id : 0);
   const max = ids.length ? Math.max(...ids) : 0;
   return max + 1;
 }
@@ -40,31 +36,18 @@ function isBcryptHash(str) {
   return typeof str === 'string' && str.startsWith('$2');
 }
 
-// ---------- Mailer (uses env vars) ----------
-let transporter = null;
-
-if (process.env.SMTP_USER && process.env.SMTP_PASS) {
-  transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST || 'smtp.gmail.com',
-    port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587,
-    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for 587
-    auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASS
-    }
-  });
-} else {
-  console.warn('⚠️ SMTP not configured. Emails will NOT be sent. Set SMTP_USER and SMTP_PASS for email capability.');
-}
-
-// ---------- Routes ----------
-
-// Health
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', message: 'Manager API is running' });
+// ---------- Mailer ----------
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,
+  auth: {
+    user: 'deepakkhimavath@gmail.com',
+    pass: 'grnz atiu ujqk gsti' // Gmail App Password
+  }
 });
 
-// Get all users
+// ---------- Users ----------
 app.get('/users', (req, res) => {
   try {
     const data = readDB();
@@ -75,7 +58,7 @@ app.get('/users', (req, res) => {
   }
 });
 
-// Get single user by id
+// NEW: fetch single user by id (needed by manager to get email)
 app.get('/users/:id', (req, res) => {
   try {
     const data = readDB();
@@ -88,12 +71,13 @@ app.get('/users/:id', (req, res) => {
   }
 });
 
-// Login
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const data = readDB();
     const user = data.users.find(u => (u.email || '').toLowerCase() === (email || '').toLowerCase());
+
     if (!user) return res.status(400).json({ success: false, message: 'User not found' });
 
     if (isBcryptHash(user.password)) {
@@ -102,7 +86,6 @@ app.post('/login', async (req, res) => {
       return res.json({ success: true, user, message: 'Login successful!' });
     }
 
-    // legacy plaintext password -> upgrade to hashed
     if (password === user.password) {
       user.password = await bcrypt.hash(password, 10);
       writeDB(data);
@@ -115,10 +98,14 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ success: false, message: 'Login failed' });
   }
 });
-
-// Register
+// Health
+app.get('/health', (req, res) => {
+    res.json({ status: 'ok', message: 'Manager API is running' });
+  });
+  
 app.post('/users', async (req, res) => {
   const { name, email, password, phone } = req.body;
+
   try {
     const data = readDB();
     const exists = data.users.find(u => (u.email || '').toLowerCase() === (email || '').toLowerCase());
@@ -131,24 +118,16 @@ app.post('/users', async (req, res) => {
     data.users.push(user);
     writeDB(data);
 
-    // send welcome email if transporter configured, but do not fail registration if email fails
-    if (transporter) {
-      const mailOptions = {
-        from: process.env.EMAIL_FROM || `"Loan App" <${process.env.SMTP_USER}>`,
-        to: email,
-        subject: '🎉 Welcome to Loan App!',
-        html: `<h2>Hi ${name},</h2>
-          <p>Thank you for registering with <b>Loan App</b>.</p>
-          <br/><p>Regards,<br/>Loan App Team</p>`
-      };
-      try {
-        await transporter.sendMail(mailOptions);
-      } catch (err) {
-        console.error('⚠️ Failed to send welcome email:', err.message);
-      }
-    } else {
-      console.log('ℹ️ Skipping welcome email because transporter is not configured.');
-    }
+    const mailOptions = {
+      from: '"Loan App 🚀" <deepakkhimavath@gmail.com>',
+      to: email,
+      subject: '🎉 Welcome to Loan App!',
+      html: `<h2>Hi ${name},</h2>
+             <p>Thank you for registering with <b>Loan App</b>.</p>
+             <p>You can now login and explore our services.</p>
+             <br/><p>Regards,<br/>Loan App Team</p>`
+    };
+    await transporter.sendMail(mailOptions);
 
     res.json({ success: true, message: 'Registration successful! Please login.' });
   } catch (err) {
@@ -157,26 +136,29 @@ app.post('/users', async (req, res) => {
   }
 });
 
-// Notify borrower about loan status (sent by manager)
+// ---------- Notifications (email only) ----------
+// NEW: manager calls this after status change to notify borrower
 app.post('/notify-loan-status', async (req, res) => {
   try {
     const { email, name, loanId, status } = req.body;
+
     if (!email || !loanId || !status) {
       return res.status(400).json({ success: false, message: 'email, loanId and status are required' });
-    }
-
-    if (!transporter) {
-      return res.status(500).json({ success: false, message: 'SMTP not configured on server' });
     }
 
     const subject = `Loan #${loanId} ${status}`;
     const html =
       `<h2>Hi ${name || 'there'},</h2>
        <p>Your loan application <b>#${loanId}</b> has been <b>${status}</b>.</p>
+       ${status === 'Approved'
+          ? '<p>🎉 Congratulations! Our team will contact you soon.</p>'
+          : status === 'Rejected'
+            ? '<p>We’re sorry to inform you it was not approved at this time. You may re-apply later.</p>'
+            : '<p>Status updated.</p>'}
        <br/><p>Regards,<br/>Loan App Team</p>`;
 
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || `"Loan App" <${process.env.SMTP_USER}>`,
+      from: '"Loan App 🚀" <deepakkhimavath@gmail.com>',
       to: email,
       subject,
       html
@@ -189,7 +171,7 @@ app.post('/notify-loan-status', async (req, res) => {
   }
 });
 
-// Start
+// ---------- Start ----------
 app.listen(PORT, () => {
-  console.log(`🚀 Manager API running at http://localhost:${PORT}`);
+  console.log(`🚀 Backend running at http://localhost:${PORT}`);
 });
