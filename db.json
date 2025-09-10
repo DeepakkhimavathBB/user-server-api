@@ -1,0 +1,124 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "name": "asdfg",
+        "email": "asdfg@gmail.com",
+        "password": "$2b$10$Kfqqinx7X3LttSxLBDmo/e5z01AjNJw/hBbK03hI1b6gWLLaWf/Wi",
+        "phone": "2348765445",
+        "createdAt": "2025-08-23T15:45:37.832Z"
+      },
+      {
+        "id": 2,
+        "name": "Deepak Khimavath ",
+        "email": "khimavathdeepak@gmail.com",
+        "password": "$2b$10$fWkuI3zWhw4sv8mHkysdr.LBFZWfBS.MZRKx22Pl5uon.eiDLQDx2",
+        "phone": "2345678976",
+        "createdAt": "2025-08-23T16:30:10.774Z"
+      },
+      {
+        "id": 4,
+        "name": "deepak",
+        "email": "d@gmail.com",
+        "password": "$2b$10$Ef4zU0K6FNV04pBXoxDO0uELB1pTZWYynyaxYCuy1Ei0/J/i0wIge",
+        "phone": "2345678987",
+        "createdAt": "2025-09-04T04:03:31.019Z"
+      },
+      {
+        "id": 5,
+        "name": "a",
+        "email": "a@gmail.com",
+        "password": "$2b$10$fJh/tAjmaJ2S0rc0o1F41OQyk1pFtZ5XiV0ane4FA/JrovRLhj7rG",
+        "phone": "7204209095",
+        "createdAt": "2025-09-04T04:06:32.577Z"
+      },
+      {
+        "id": 6,
+        "name": "a",
+        "email": "b@gmail.com",
+        "password": "$2b$10$4KFRDdEbaJXYBiit3O0pC.yosyNu8I0Ac8IVkLMJIKxkpIax46Hda",
+        "phone": "7204209095",
+        "createdAt": "2025-09-04T04:09:24.497Z"
+      },
+      {
+        "id": 7,
+        "name": "",
+        "email": "khimavathd@gmail.com",
+        "password": "$2b$10$a/OjGRrp7Nxm3sEghvuuT.TbN.Nm38UPcHg55UvoMYef8kAjdoV4a",
+        "phone": "7204209095",
+        "createdAt": "2025-09-04T04:13:58.277Z"
+      },
+      {
+        "id": 8,
+        "name": "e",
+        "email": "e@gmail.com",
+        "password": "$2b$10$MXl4GJ7Uq7Yqv7iQ/15q3OUwRZisvNdvmC.LZfNx5YFAuI.EbxX6K",
+        "phone": "123456789",
+        "createdAt": "2025-09-04T04:16:52.068Z"
+      },
+      {
+        "id": 9,
+        "name": "q",
+        "email": "q@gmail.com",
+        "password": "$2b$10$qJ2AzI7Ywz5PUnRW31YCYOf1n.jUe2XWSqCmrxyCBMyqcKiBMS20C",
+        "phone": "1234567898",
+        "createdAt": "2025-09-04T04:33:06.332Z"
+      },
+      {
+        "id": 10,
+        "name": "h",
+        "email": "h@gmail.com",
+        "password": "$2b$10$V2z4lcfBAtkcX88orhcaYu9E2QxcJpJXkd9bHYgwRWIFwWVSgQI.2",
+        "phone": "1234567892",
+        "createdAt": "2025-09-05T12:48:21.409Z"
+      },
+      {
+        "id": 12,
+        "name": "bhavana",
+        "email": "bhavanaminchu@gmail.com",
+        "password": "$2b$10$lUkYcO7OEXiNpNUB/Pi4jOau0shbq7smVKyVKMgDc5k.HHhc7bfO.",
+        "phone": "6676543456",
+        "createdAt": "2025-09-05T13:18:26.150Z"
+      },
+      {
+        "id": 13,
+        "name": "kkk",
+        "email": "k@gmail.com",
+        "password": "$2b$10$0zyNPU9yvvmXSQ7mx7iEvuhYQoBjNLYgKjEoJ7dA0vAZ/Y7v898NC",
+        "phone": "1234567865",
+        "createdAt": "2025-09-08T13:39:26.790Z"
+      },
+      {
+        "id": 14,
+        "name": "kushal kn",
+        "email": "kushalkn11@gmail.com",
+        "password": "$2b$10$GW6kFZSR21FUFH.B7Ddg.uEYu9h5HFelYsU5m8BuTb7SxOC/sDrdC",
+        "phone": "9876543",
+        "createdAt": "2025-09-09T08:16:21.347Z"
+      },
+      {
+        "id": 15,
+        "name": "Deepak Khimavath BB",
+        "email": "khimavathdd@gmail.com",
+        "password": "$2b$10$mjgVNiDmAzSMsohxv7vR3u.sD7V0xeY0v3VKn4NB8WacUXvB4UJbG",
+        "phone": "6342523332",
+        "createdAt": "2025-09-10T06:11:32.693Z"
+      },
+      {
+        "id": 16,
+        "name": "Deepak",
+        "email": "deepakkhimavath@gmail.com",
+        "password": "$2b$10$d/.nD0pHhHqlT6tRPPYqRu1HVB09Pp8H0xxySJEQXtjdPjQbdqTE2",
+        "phone": "123456789",
+        "createdAt": "2025-09-10T10:11:30.363Z"
+      },
+      {
+        "id": 17,
+        "name": "Bhavana",
+        "email": "bhavana@gmail.com",
+        "password": "$2b$10$6Mt2F2WQu4ApwmuOtO00PuPzQsgICCDQJ6/z4J0Yq0hfSkv4SsmVK",
+        "phone": "3242526243",
+        "createdAt": "2025-09-10T11:19:10.691Z"
+      }
+    ]
+  }
